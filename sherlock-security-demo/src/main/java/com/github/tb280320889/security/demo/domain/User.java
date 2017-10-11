@@ -5,8 +5,11 @@ import lombok.Setter;
 import lombok.ToString;
 
 import com.fasterxml.jackson.annotation.JsonView;
+import com.github.tb280320889.security.demo.validator.MyConstraint;
 
 import org.hibernate.validator.constraints.NotBlank;
+
+import javax.validation.constraints.Past;
 
 import java.sql.Timestamp;
 
@@ -19,9 +22,12 @@ import java.sql.Timestamp;
 @ToString
 public class User {
 
+  @MyConstraint(message = "this is a test")
   private String username;
   private String password;
   private Integer id;
+
+  @Past(message = "birthday must be in the past")
   private Timestamp birthday;
 
   @JsonView(UserSimpleView.class)
@@ -30,7 +36,7 @@ public class User {
   }
 
   @JsonView(UserDetailView.class)
-  @NotBlank
+  @NotBlank(message = "password must not be blank")
   public String getPassword() {
     return password;
   }

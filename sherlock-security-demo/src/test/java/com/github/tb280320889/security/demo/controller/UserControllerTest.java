@@ -13,10 +13,13 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
-import java.util.Calendar;
+import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -53,7 +56,7 @@ public class UserControllerTest {
         .andExpect(jsonPath("$.length()").value(3))
         .andReturn().getResponse().getContentAsString();
 
-    log.warn("json : {} ", result);
+    log.info("json : {} ", result);
 
   }
 
@@ -65,7 +68,7 @@ public class UserControllerTest {
         .andExpect(jsonPath("$.username").value("alessio"))
         .andReturn().getResponse().getContentAsString();
 
-    log.warn("json : {} ", result);
+    log.info("json : {} ", result);
   }
 
   @Test
@@ -79,9 +82,9 @@ public class UserControllerTest {
   public void whenCreateSuccess() throws Exception {
 
 
-    final Long timeStamp = Calendar.getInstance().getTime().getTime();
+    final Long timeStamp = LocalDateTime.now().plusYears(1L).toInstant(ZoneOffset.UTC).toEpochMilli();
 
-    log.warn("ts : {} ", timeStamp);
+    log.info("ts : {} ", timeStamp);
     final String content = "{\"username\":\"alessio\",\"password\":null,\"id\":1,\"birthday\":  " + timeStamp + '}';
     final String result = mockMvc.perform(post("/user")
         .contentType(MediaType.APPLICATION_JSON_UTF8)
@@ -90,6 +93,29 @@ public class UserControllerTest {
         .andExpect(jsonPath("$.id").value("1"))
         .andReturn().getResponse().getContentAsString();
 
-    log.warn("result : {} ", result);
+    log.info("result : {} ", result);
+  }
+
+  @Test
+  public void whenUpdateSuccess() throws Exception {
+    final Long timeStamp = LocalDateTime.now().plusYears(1L).toInstant(ZoneOffset.UTC).toEpochMilli();
+
+    log.info("ts : {} ", timeStamp);
+    final String content = "{\"username\":\"alessio\",\"password\":123,\"id\":1,\"birthday\":  " + timeStamp + '}';
+    final String result = mockMvc.perform(put("/user/1")
+        .contentType(MediaType.APPLICATION_JSON_UTF8)
+        .content(content))
+        .andExpect(status().isOk())
+        .andExpect(jsonPath("$.id").value("1"))
+        .andReturn().getResponse().getContentAsString();
+
+    log.info("result : {} ", result);
+  }
+
+  @Test
+  public void whenDeleteSuccess() throws Exception {
+    mockMvc.perform(delete("/user/1")
+        .contentType(MediaType.APPLICATION_JSON_UTF8))
+        .andExpect(status().isOk());
   }
 }
