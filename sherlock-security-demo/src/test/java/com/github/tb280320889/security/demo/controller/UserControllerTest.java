@@ -1,5 +1,7 @@
 package com.github.tb280320889.security.demo.controller;
 
+import lombok.extern.slf4j.Slf4j;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -21,6 +23,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
+@Slf4j
 public class UserControllerTest {
   @Autowired
   private WebApplicationContext webApplicationContext;
@@ -34,7 +37,7 @@ public class UserControllerTest {
 
   @Test
   public void whenListUserSuccess() throws Exception {
-    mockMvc.perform(get("/user")
+    final String result = mockMvc.perform(get("/user")
         .param("username", "sherlock")
         .param("age", "27")
         .param("ageTo", "100")
@@ -44,16 +47,22 @@ public class UserControllerTest {
         .param("sort", "age,desc")
         .contentType(MediaType.APPLICATION_JSON_UTF8))
         .andExpect(status().isOk())
-        .andExpect(jsonPath("$.length()").value(3));
+        .andExpect(jsonPath("$.length()").value(3))
+        .andReturn().getResponse().getContentAsString();
+
+    log.warn("json : {} ", result);
 
   }
 
   @Test
   public void whenGetUserByIdSuccess() throws Exception {
-    mockMvc.perform(get("/user/1")
+    final String result = mockMvc.perform(get("/user/1")
         .contentType(MediaType.APPLICATION_JSON_UTF8))
         .andExpect(status().isOk())
-        .andExpect(jsonPath("$.username").value("alessio"));
+        .andExpect(jsonPath("$.username").value("alessio"))
+        .andReturn().getResponse().getContentAsString();
+
+    log.warn("json : {} ", result);
   }
 
   @Test
