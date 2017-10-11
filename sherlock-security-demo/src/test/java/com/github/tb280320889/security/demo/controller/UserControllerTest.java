@@ -33,7 +33,7 @@ public class UserControllerTest {
   }
 
   @Test
-  public void whenQuerySuccess() throws Exception {
+  public void whenListUserSuccess() throws Exception {
     mockMvc.perform(get("/user")
         .param("username", "sherlock")
         .param("age", "27")
@@ -46,5 +46,20 @@ public class UserControllerTest {
         .andExpect(status().isOk())
         .andExpect(jsonPath("$.length()").value(3));
 
+  }
+
+  @Test
+  public void whenGetUserByIdSuccess() throws Exception {
+    mockMvc.perform(get("/user/1")
+        .contentType(MediaType.APPLICATION_JSON_UTF8))
+        .andExpect(status().isOk())
+        .andExpect(jsonPath("$.username").value("alessio"));
+  }
+
+  @Test
+  public void whenGetUserByIdFail() throws Exception {
+    mockMvc.perform(get("/user/a")
+        .contentType(MediaType.APPLICATION_JSON_UTF8))
+        .andExpect(status().is4xxClientError());
   }
 }
