@@ -13,7 +13,10 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
+import java.util.Calendar;
+
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -70,5 +73,23 @@ public class UserControllerTest {
     mockMvc.perform(get("/user/a")
         .contentType(MediaType.APPLICATION_JSON_UTF8))
         .andExpect(status().is4xxClientError());
+  }
+
+  @Test
+  public void whenCreateSuccess() throws Exception {
+
+
+    final Long timeStamp = Calendar.getInstance().getTime().getTime();
+
+    log.warn("ts : {} ", timeStamp);
+    final String content = "{\"username\":\"alessio\",\"password\":null,\"id\":1,\"birthday\":  " + timeStamp + '}';
+    final String result = mockMvc.perform(post("/user")
+        .contentType(MediaType.APPLICATION_JSON_UTF8)
+        .content(content))
+        .andExpect(status().isOk())
+        .andExpect(jsonPath("$.id").value("1"))
+        .andReturn().getResponse().getContentAsString();
+
+    log.warn("result : {} ", result);
   }
 }
