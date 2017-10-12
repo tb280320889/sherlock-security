@@ -1,5 +1,7 @@
 package com.github.tb280320889.security.demo.controller;
 
+import io.swagger.annotations.ApiModelProperty;
+
 import lombok.Data;
 
 /**
@@ -10,7 +12,11 @@ import lombok.Data;
 public class UserQueryCondition {
 
   private String username;
+
+  @ApiModelProperty("age start number")
   private Integer age;
+
+  @ApiModelProperty("age end number")
   private Integer ageTo;
   private String xxx;
 

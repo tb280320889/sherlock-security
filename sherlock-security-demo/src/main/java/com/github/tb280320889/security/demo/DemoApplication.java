@@ -1,5 +1,7 @@
 package com.github.tb280320889.security.demo;
 
+import springfox.documentation.swagger2.annotations.EnableSwagger2;
+
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -11,8 +13,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 @SpringBootApplication
 @RestController
+@EnableSwagger2 //http://localhost:8060/swagger-ui.html
 public class DemoApplication {
-
 
   private static final String HELLO = "hello";
 

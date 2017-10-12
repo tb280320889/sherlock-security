@@ -1,5 +1,8 @@
 package com.github.tb280320889.security.demo.controller;
 
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
+
 import com.fasterxml.jackson.annotation.JsonView;
 import com.github.tb280320889.security.demo.domain.User;
 
@@ -40,6 +43,7 @@ public class UserController {
    */
   @GetMapping
   @JsonView(User.UserSimpleView.class)
+  @ApiOperation(value = "method comment")
   public List<User> listUser(UserQueryCondition userQueryCondition, @PageableDefault(page = 1, size = 15, sort = "username,asc") Pageable pageable) {
 
     log.info("userQueryCondition  : {} ", userQueryCondition);
@@ -60,7 +64,7 @@ public class UserController {
    */
   @GetMapping("/{id:\\d+}")
   @JsonView(User.UserDetailView.class)
-  public User getUserById(@PathVariable String id) {
+  public User getUserById(@PathVariable @ApiParam("user id") String id) {
 
 //    throw new UserNotExistException(id);
 
