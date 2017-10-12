@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
  * Created by TangBin on 2017/10/10.
  */
 
-@SpringBootApplication
+@SpringBootApplication(scanBasePackages = {"com.github.tb280320889.security.*"})
 @RestController
 @EnableSwagger2 //http://localhost:8060/swagger-ui.html
 public class DemoApplication {
@@ -26,4 +26,5 @@ public class DemoApplication {
   public String hello() {
     return "Hello";
   }
+
 }

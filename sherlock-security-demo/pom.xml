@@ -14,7 +14,7 @@
     <dependencies>
         <dependency>
             <groupId>com.github.tb280320889.security</groupId>
-            <artifactId>sherlock-security-core</artifactId>
+            <artifactId>sherlock-security-browser</artifactId>
             <version>${sherlock.security.version}</version>
         </dependency>
         <dependency>
