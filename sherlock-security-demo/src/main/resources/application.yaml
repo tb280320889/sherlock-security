@@ -1,7 +1,7 @@
 spring:
   datasource:
     driver-class-name: com.mysql.jdbc.Driver
-    url: jdbc:mysql://127.0.0.1:3306/sherlock-security-demo?useUnicode=yes&characterEncodeing=UTF8
+    url: jdbc:mysql://127.0.0.1:3306/sherlock-security-demo?useUnicode=yes&characterEncodeing=UTF-8&useSSL=false
     username: root
     password: root
 
@@ -13,7 +13,21 @@ spring:
 
   session:
     store-type: none
-
+  jpa:
+    database: MYSQL
+    show-sql: true
+    hibernate:
+      ddl-auto: update
+  redis:
+    database: 0
+    host: localhost
+    password:
+    port: 6379
+    pool:
+      max-idle: 8
+      min-idle: 0
+      max-active: 8
+      max-wait: -1
 
 server:
   port: 8060
