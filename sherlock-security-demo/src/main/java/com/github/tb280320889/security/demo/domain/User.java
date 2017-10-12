@@ -1,17 +1,17 @@
 package com.github.tb280320889.security.demo.domain;
 
+import com.fasterxml.jackson.annotation.JsonView;
+import com.github.tb280320889.security.demo.validator.MyConstraint;
+
+import java.sql.Timestamp;
+
+import javax.validation.constraints.Past;
+
 import lombok.EqualsAndHashCode;
 import lombok.Setter;
 import lombok.ToString;
 
-import com.fasterxml.jackson.annotation.JsonView;
-import com.github.tb280320889.security.demo.validator.MyConstraint;
-
 import org.hibernate.validator.constraints.NotBlank;
-
-import javax.validation.constraints.Past;
-
-import java.sql.Timestamp;
 
 /**
  * Created by TangBin on 2017/10/11.
