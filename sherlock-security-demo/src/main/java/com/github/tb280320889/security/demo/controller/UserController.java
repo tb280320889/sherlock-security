@@ -2,7 +2,6 @@ package com.github.tb280320889.security.demo.controller;
 
 import com.fasterxml.jackson.annotation.JsonView;
 import com.github.tb280320889.security.demo.domain.User;
-import com.github.tb280320889.security.demo.exception.UserNotExistException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -63,11 +62,14 @@ public class UserController {
   @JsonView(User.UserDetailView.class)
   public User getUserById(@PathVariable String id) {
 
-    throw new UserNotExistException(id);
+//    throw new UserNotExistException(id);
 
-//    final User user = new User();
-//    user.setUsername("alessio");
-//    return user;
+
+    log.info("enter getUserById");
+
+    final User user = new User();
+    user.setUsername("alessio");
+    return user;
   }
 
   /**
