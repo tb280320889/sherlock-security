@@ -45,7 +45,7 @@ public class FileController {
 
     final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMdd");
 
-    final String path = FileController.class.getResource("").getPath();
+    final String path = this.getClass().getResource("").getPath();
     log.info("path : {} ", path);
     final File localfile = new File(path, dateFormat.format(new Date()) + ".txt");
 

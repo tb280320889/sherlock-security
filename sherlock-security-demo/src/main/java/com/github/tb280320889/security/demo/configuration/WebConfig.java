@@ -7,8 +7,6 @@ import java.util.ArrayList;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 
@@ -16,7 +14,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter
  * Created by TangBin on 2017/10/12.
  */
 
-@Configuration
+//@Configuration
 public class WebConfig extends WebMvcConfigurerAdapter {
 
   private final TimeInterceptor timeInterceptor;
@@ -25,11 +23,11 @@ public class WebConfig extends WebMvcConfigurerAdapter {
   public WebConfig(TimeInterceptor timeInterceptor) {
     this.timeInterceptor = timeInterceptor;
   }
-  
+
   /**
    * @return
    */
-  @Bean
+//  @Bean
   public FilterRegistrationBean timeFilter() {
     final FilterRegistrationBean filterRegistrationBean = new FilterRegistrationBean();
 
@@ -46,4 +44,10 @@ public class WebConfig extends WebMvcConfigurerAdapter {
   public void addInterceptors(InterceptorRegistry registry) {
     registry.addInterceptor(timeInterceptor);
   }
+
+//
+//  @Override
+//  public void configureAsyncSupport(AsyncSupportConfigurer configurer) {
+//    configurer.setTaskExecutor()
+//  }
 }
