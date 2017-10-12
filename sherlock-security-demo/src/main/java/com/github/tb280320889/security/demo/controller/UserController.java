@@ -1,9 +1,16 @@
 package com.github.tb280320889.security.demo.controller;
 
-import lombok.extern.slf4j.Slf4j;
-
 import com.fasterxml.jackson.annotation.JsonView;
 import com.github.tb280320889.security.demo.domain.User;
+import com.github.tb280320889.security.demo.exception.UserNotExistException;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+
+import javax.validation.Valid;
+
+import lombok.extern.slf4j.Slf4j;
 
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
@@ -17,12 +24,6 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-import javax.validation.Valid;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
 
 /**
  * Created by TangBin on 2017/10/11.
@@ -61,9 +62,12 @@ public class UserController {
   @GetMapping("/{id:\\d+}")
   @JsonView(User.UserDetailView.class)
   public User getUserById(@PathVariable String id) {
-    final User user = new User();
-    user.setUsername("alessio");
-    return user;
+
+    throw new UserNotExistException(id);
+
+//    final User user = new User();
+//    user.setUsername("alessio");
+//    return user;
   }
 
   /**
