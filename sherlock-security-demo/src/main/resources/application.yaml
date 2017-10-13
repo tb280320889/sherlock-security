@@ -34,11 +34,11 @@ sherlock:
   security:
     browser-properties:
         loginPage: /login/demo-login.html
-
-
-
-
-
+    validate-code-properties:
+        image-code-properties:
+            length: 6
+            width: 100
+            url: /user,/user/*
 #security:
 #  basic:
 #    enabled: false

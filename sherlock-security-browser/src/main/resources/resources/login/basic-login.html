@@ -1,33 +1,43 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>Login</title>
+  <meta charset="UTF-8">
+  <title>Login</title>
 </head>
 <body>
 <h2>basic login page</h2>
 <h3>form login</h3>
 <form action="/authentication/form" method="post">
-    <table>
-        <tr>
-            <td>username:</td>
-            <td><input type="text" name="username">
-            </td>
-        </tr>
-        <tr>
-            <td>
-                password:
-            </td>
-            <td>
-                <input type="password" name="password">
-            </td>
-        </tr>
-        <tr>
-            <td colspan="2">
-                <button type="submit">login</button>
-            </td>
-        </tr>
-    </table>
+  <table>
+    <tr>
+      <td>username:</td>
+      <td><input type="text" name="username">
+      </td>
+    </tr>
+    <tr>
+      <td>
+        password:
+      </td>
+      <td>
+        <input type="password" name="password">
+      </td>
+    </tr>
+    <tr>
+      <td>
+        imageCode:
+      </td>
+      <td>
+        <input type="text" name="imageCode">
+        <img src="/validate_code/image_code">
+      </td>
+    </tr>
+    <tr>
+      <td colspan="2">
+        <button type="submit">login</button>
+      </td>
+    </tr>
+
+  </table>
 
 </form>
 

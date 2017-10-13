@@ -13,10 +13,12 @@ import org.springframework.stereotype.Component;
 
 @Getter
 @Setter
-@Component
 @ConfigurationProperties(prefix = "sherlock.security")
+@Component
 public class SecurityProperties {
 
   private BrowserProperties browserProperties = new BrowserProperties();
+
+  private ValidateCodeProperties validateCodeProperties = new ValidateCodeProperties();
 
 }
