@@ -30,6 +30,14 @@ spring:
 server:
   port: 8060
 
+sherlock:
+  security:
+    browser-properties:
+        loginPage: /login/demo-login.html
+
+
+
+
 
 #security:
 #  basic:

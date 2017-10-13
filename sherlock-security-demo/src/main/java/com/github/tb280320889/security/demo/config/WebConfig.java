@@ -1,4 +1,4 @@
-package com.github.tb280320889.security.demo.configuration;
+package com.github.tb280320889.security.demo.config;
 
 import com.github.tb280320889.security.demo.filter.TimeFilter;
 import com.github.tb280320889.security.demo.interceptor.TimeInterceptor;
