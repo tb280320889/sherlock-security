@@ -52,7 +52,7 @@ public class ImageCodeGenerator implements ValidateCodeGenerator {
       final int yl = random.nextInt(12);
       graphics.drawLine(x, y, x + xl, y + yl);
     }
-    String sRand = " ";
+    String sRand = "";
     for (int i = 0; i < 4; i++) {
       final String rand = String.valueOf(random.nextInt(10));
       sRand += rand;

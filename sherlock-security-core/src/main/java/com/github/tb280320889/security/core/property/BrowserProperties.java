@@ -15,4 +15,8 @@ public class BrowserProperties {
 
   private String loginPage = "/login/basic-login.html";
 
+  private LoginResponseType loginType = LoginResponseType.JSON;
+
+  private Integer rememberMeSeconds = 3600; // 1 hour
+
 }

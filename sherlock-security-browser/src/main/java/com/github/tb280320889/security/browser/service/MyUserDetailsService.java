@@ -15,10 +15,9 @@ import org.springframework.stereotype.Component;
  * Created by TangBin on 2017/10/13.
  */
 
-@Component
 @Slf4j
+@Component
 public class MyUserDetailsService implements UserDetailsService {
-
 
   private final PasswordEncoder passwordEncoder;
 
@@ -30,7 +29,6 @@ public class MyUserDetailsService implements UserDetailsService {
 
   @Override
   public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-
 
     final boolean enabled = true;
     final boolean accountNonExpired = true;
