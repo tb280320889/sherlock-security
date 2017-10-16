@@ -1,24 +1,31 @@
-package com.github.tb280320889.security.core.validation;
+package com.github.tb280320889.security.core.validation.image;
+
+import com.github.tb280320889.security.core.validation.ValidateCode;
 
 import java.awt.image.BufferedImage;
 import java.time.LocalDateTime;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 /**
  * Created by TangBin on 2017/10/13.
  */
 
+@EqualsAndHashCode(callSuper = true)
 @Data
-public class ImageCode {
+public class ImageCode extends ValidateCode {
   private BufferedImage image;
-  private String code;
-  private LocalDateTime expireTime;
 
+
+  /**
+   * @param image
+   * @param code
+   * @param expireTime
+   */
   public ImageCode(BufferedImage image, String code, LocalDateTime expireTime) {
+    super(code, expireTime);
     this.image = image;
-    this.code = code;
-    this.expireTime = expireTime;
   }
 
   /**
@@ -27,12 +34,8 @@ public class ImageCode {
    * @param expireIn
    */
   public ImageCode(BufferedImage image, String code, Integer expireIn) {
+    super(code, expireIn);
     this.image = image;
-    this.code = code;
-    this.expireTime = LocalDateTime.now().plusSeconds(expireIn);
   }
 
-  public boolean isExpired() {
-    return LocalDateTime.now().isAfter(expireTime);
-  }
 }

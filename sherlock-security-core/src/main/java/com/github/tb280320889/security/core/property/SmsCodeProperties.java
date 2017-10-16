@@ -8,12 +8,12 @@ import org.springframework.stereotype.Component;
  * Created by TangBin on 2017/10/13.
  */
 
+
 @Data
 @Component
-public class ValidateCodeProperties {
+public class SmsCodeProperties {
 
-  private ImageCodeProperties imageCodeProperties = new ImageCodeProperties();
-
-  private SmsCodeProperties smsCodeProperties = new SmsCodeProperties();
-
+  private int length = 6;
+  private int expireIn = 60;
+  private String url;
 }

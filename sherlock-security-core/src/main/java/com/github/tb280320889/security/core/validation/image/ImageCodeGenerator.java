@@ -1,7 +1,8 @@
-package com.github.tb280320889.security.core.validation;
+package com.github.tb280320889.security.core.validation.image;
 
 import com.github.tb280320889.security.core.property.ImageCodeProperties;
 import com.github.tb280320889.security.core.property.SecurityProperties;
+import com.github.tb280320889.security.core.validation.ValidateCodeGenerator;
 
 import java.awt.Color;
 import java.awt.Font;
@@ -35,7 +36,8 @@ public class ImageCodeGenerator implements ValidateCodeGenerator {
 
     int width = ServletRequestUtils.getIntParameter(httpServletRequest.getRequest(), "width", imageCodeProperties.getWidth());
     int height = ServletRequestUtils.getIntParameter(httpServletRequest.getRequest(), "height", imageCodeProperties.getHeight());
-    final BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
+
+    final BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
 
     final Graphics graphics = image.getGraphics();
 

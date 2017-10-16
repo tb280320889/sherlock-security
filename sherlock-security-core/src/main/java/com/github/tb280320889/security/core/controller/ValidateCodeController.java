@@ -1,20 +1,17 @@
 package com.github.tb280320889.security.core.controller;
 
-import com.github.tb280320889.security.core.validation.ImageCode;
-import com.github.tb280320889.security.core.validation.ValidateCodeGenerator;
+import com.github.tb280320889.security.core.property.SecurityConstants;
+import com.github.tb280320889.security.core.validation.ValidateCodeProcessor;
+import com.github.tb280320889.security.core.validation.ValidateCodeProcessorHolder;
 
-import java.io.IOException;
-
-import javax.imageio.ImageIO;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import lombok.extern.slf4j.Slf4j;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.social.connect.web.HttpSessionSessionStrategy;
-import org.springframework.social.connect.web.SessionStrategy;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.context.request.ServletWebRequest;
@@ -24,34 +21,27 @@ import org.springframework.web.context.request.ServletWebRequest;
  */
 
 @RestController
-@RequestMapping("/validate_code")
+@RequestMapping(SecurityConstants.DEFAULT_VALIDATE_CODE_URL_PREFIX)
 @Slf4j
 public class ValidateCodeController {
-  public static final String VALIDATE_CODE = "/validate_code";
-  public static final String SESSION_KEY = "SESSION_KEY_IMAGE_CODE";
-  private final ValidateCodeGenerator imageCodeGenerator;
-  private SessionStrategy sessionStrategy = new HttpSessionSessionStrategy();
+  private final ValidateCodeProcessorHolder validateCodeProcessorHolder;
 
   @Autowired
-  public ValidateCodeController(ValidateCodeGenerator imageCodeGenerator) {
-    this.imageCodeGenerator = imageCodeGenerator;
+  public ValidateCodeController(ValidateCodeProcessorHolder validateCodeProcessorHolder) {
+    this.validateCodeProcessorHolder = validateCodeProcessorHolder;
   }
 
   /**
-   * @param httpServletRequest
-   * @param httpServletResponse
-   * @throws IOException
+   * 创建验证码，根据验证码类型不同，调用不同的 {@link ValidateCodeProcessor}接口实现
+   *
+   * @param request
+   * @param response
+   * @param type
+   * @throws Exception
    */
-  @GetMapping("/image_code")
-  public void createCode(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) throws IOException {
-
-    ImageCode imageCode = imageCodeGenerator.generateCode(new ServletWebRequest(httpServletRequest));
-
-    sessionStrategy.setAttribute(new ServletWebRequest(httpServletRequest), SESSION_KEY, imageCode);
-
-    ImageIO.write(imageCode.getImage(), "JPEG", httpServletResponse.getOutputStream());
-
+  @GetMapping("/{type}")
+  public void createCode(HttpServletRequest request, HttpServletResponse response, @PathVariable String type)
+      throws Exception {
+    validateCodeProcessorHolder.findValidateCodeProcessor(type).create(new ServletWebRequest(request, response));
   }
-
-
 }

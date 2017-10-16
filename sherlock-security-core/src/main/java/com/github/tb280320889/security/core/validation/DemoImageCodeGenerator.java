@@ -1,5 +1,7 @@
 package com.github.tb280320889.security.core.validation;
 
+import com.github.tb280320889.security.core.validation.image.ImageCode;
+
 import lombok.extern.slf4j.Slf4j;
 
 import org.springframework.web.context.request.ServletWebRequest;

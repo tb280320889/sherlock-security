@@ -37,15 +37,11 @@ public class SherlockAuthenticationFailureHandler extends SimpleUrlAuthenticatio
     this.securityProperties = securityProperties;
   }
 
-
-  /* (non-Javadoc)
-   * @see org.springframework.security.web.authentication.AuthenticationFailureHandler#onAuthenticationFailure(javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse, org.springframework.security.core.AuthenticationException)
-   */
   @Override
   public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response,
                                       AuthenticationException exception) throws IOException, ServletException {
 
-    logger.info("登录失败");
+    logger.info("login failure");
 
     if (LoginResponseType.JSON.equals(securityProperties.getBrowserProperties().getLoginType())) {
       response.setStatus(HttpStatus.INTERNAL_SERVER_ERROR.value());

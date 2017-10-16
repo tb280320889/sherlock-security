@@ -46,6 +46,32 @@
   </table>
 
 </form>
+<h3>sms login</h3>
+<form action="/authentication/mobile" method="post">
+  <table>
+    <tr>
+      <td>mobile number:</td>
+      <td><input type="text" name="mobile" value="15912345678">
+      </td>
+    </tr>
+    <tr>
+      <td>
+        sms verification code:
+      </td>
+      <td>
+        <input type="text" name="smsCode">
+        <a href="/validate_code/sms_code?mobile=15912345678">send verification code</a>
+      </td>
+    </tr>
+    <tr>
+      <td colspan="2">
+        <button type="submit">login</button>
+      </td>
+    </tr>
+
+  </table>
+
+</form>
 
 </body>
 </html>

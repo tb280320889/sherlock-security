@@ -1,11 +1,10 @@
 package com.github.tb280320889.security.browser.config;
 
-import com.github.tb280320889.security.browser.authentication.SherlockAuthenticationFailureHandler;
-import com.github.tb280320889.security.browser.authentication.SherlockAuthenticationSuccessHandler;
-import com.github.tb280320889.security.browser.controller.AuthenticationController;
-import com.github.tb280320889.security.core.controller.ValidateCodeController;
-import com.github.tb280320889.security.core.filter.ValidateCodeFilter;
+import com.github.tb280320889.security.core.authentication.AbstractChannelSecurityConfig;
+import com.github.tb280320889.security.core.authentication.mobile.SmsCodeAuthenticationSecurityConfig;
+import com.github.tb280320889.security.core.property.SecurityConstants;
 import com.github.tb280320889.security.core.property.SecurityProperties;
+import com.github.tb280320889.security.core.validation.ValidateCodeSecurityConfig;
 
 import javax.sql.DataSource;
 
@@ -14,9 +13,9 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.authentication.AuthenticationFailureHandler;
+import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.rememberme.JdbcTokenRepositoryImpl;
 import org.springframework.security.web.authentication.rememberme.PersistentTokenRepository;
 
@@ -25,28 +24,34 @@ import org.springframework.security.web.authentication.rememberme.PersistentToke
  */
 
 @Configuration
-public class BrowserSecurityConfig extends WebSecurityConfigurerAdapter {
+public class BrowserSecurityConfig extends AbstractChannelSecurityConfig {
 
   private final SecurityProperties securityProperties;
   private final DataSource dataSource;
   private final UserDetailsService userDetailsService;
-  private final SherlockAuthenticationFailureHandler sherlockAuthenticationFailureHandler;
-  private final SherlockAuthenticationSuccessHandler sherlockAuthenticationSuccessHandler;
+  private final SmsCodeAuthenticationSecurityConfig smsCodeAuthenticationSecurityConfig;
+  private final ValidateCodeSecurityConfig validateCodeSecurityConfig;
+  private final AuthenticationSuccessHandler sherlockAuthenticationSuccessHandler;
+  private final AuthenticationFailureHandler sherlockAuthenticationFailureHandler;
+
 
   /**
    * @param securityProperties
    * @param dataSource
    * @param userDetailsService
-   * @param sherlockAuthenticationFailureHandler
-   * @param sherlockAuthenticationSuccessHandler
+   * @param smsCodeAuthenticationSecurityConfig
+   * @param validateCodeSecurityConfig
    */
   @Autowired
-  public BrowserSecurityConfig(SecurityProperties securityProperties, @Qualifier("dataSource") DataSource dataSource, UserDetailsService userDetailsService, SherlockAuthenticationFailureHandler sherlockAuthenticationFailureHandler, SherlockAuthenticationSuccessHandler sherlockAuthenticationSuccessHandler) {
+  public BrowserSecurityConfig(SecurityProperties securityProperties, @Qualifier("dataSource") DataSource dataSource, UserDetailsService userDetailsService, SmsCodeAuthenticationSecurityConfig smsCodeAuthenticationSecurityConfig, ValidateCodeSecurityConfig validateCodeSecurityConfig, AuthenticationSuccessHandler sherlockAuthenticationSuccessHandler, AuthenticationFailureHandler sherlockAuthenticationFailureHandler) {
+    super(sherlockAuthenticationSuccessHandler, sherlockAuthenticationFailureHandler);
     this.securityProperties = securityProperties;
     this.dataSource = dataSource;
     this.userDetailsService = userDetailsService;
-    this.sherlockAuthenticationFailureHandler = sherlockAuthenticationFailureHandler;
+    this.smsCodeAuthenticationSecurityConfig = smsCodeAuthenticationSecurityConfig;
+    this.validateCodeSecurityConfig = validateCodeSecurityConfig;
     this.sherlockAuthenticationSuccessHandler = sherlockAuthenticationSuccessHandler;
+    this.sherlockAuthenticationFailureHandler = sherlockAuthenticationFailureHandler;
   }
 
   /**
@@ -63,28 +68,23 @@ public class BrowserSecurityConfig extends WebSecurityConfigurerAdapter {
 
   @Override
   protected void configure(HttpSecurity http) throws Exception {
-    ValidateCodeFilter filter = new ValidateCodeFilter(securityProperties);
-    filter.setAuthenticationFailureHandler(sherlockAuthenticationFailureHandler);
-    filter.afterPropertiesSet();
+    applyPasswordAuthenticationConfig(http);
 
-    http.addFilterBefore(filter, UsernamePasswordAuthenticationFilter.class)
-        .formLogin()
-        .loginPage(AuthenticationController.AUTHENTICATION + "/require")
-        .loginProcessingUrl("/authentication/form")
-        .successHandler(sherlockAuthenticationSuccessHandler)
-        .failureHandler(sherlockAuthenticationFailureHandler)
+    http.apply(validateCodeSecurityConfig)
         .and()
-
+        .apply(smsCodeAuthenticationSecurityConfig)
+        .and()
         .rememberMe()
         .tokenRepository(persistentTokenRepository())
         .tokenValiditySeconds(securityProperties.getBrowserProperties().getRememberMeSeconds())
         .userDetailsService(userDetailsService)
         .and()
-
         .authorizeRequests()
-        .antMatchers(AuthenticationController.AUTHENTICATION + "/*",
-            "/login/*",
-            ValidateCodeController.VALIDATE_CODE + "/*")
+        .antMatchers(
+            SecurityConstants.DEFAULT_UNAUTHENTICATION_URL,
+            SecurityConstants.DEFAULT_LOGIN_PROCESSING_URL_MOBILE,
+            securityProperties.getBrowserProperties().getLoginPage(),
+            SecurityConstants.DEFAULT_VALIDATE_CODE_URL_PREFIX + "/*")
         .permitAll()
         .anyRequest()
         .authenticated()

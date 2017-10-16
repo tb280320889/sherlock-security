@@ -1,8 +1,6 @@
-package com.github.tb280320889.security.core.config;
+package com.github.tb280320889.security.core.validation;
 
 import com.github.tb280320889.security.core.property.SecurityProperties;
-import com.github.tb280320889.security.core.validation.SmsCodeGenerator;
-import com.github.tb280320889.security.core.validation.ValidateCodeGenerator;
 import com.github.tb280320889.security.core.validation.image.ImageCodeGenerator;
 import com.github.tb280320889.security.core.validation.sms.DefaultSmsCodeSender;
 import com.github.tb280320889.security.core.validation.sms.SmsCodeSender;
@@ -13,7 +11,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 /**
- * Created by TangBin on 2017/10/13.
+ * Created by TangBin on 2017/10/16.
  */
 
 @Configuration
@@ -27,16 +25,11 @@ public class ValidateCodeBeanConfig {
   }
 
   @Bean
-  @ConditionalOnMissingBean(name = "imageCodeGenerator")
-  public ValidateCodeGenerator imageCodeGenerator() {
+  @ConditionalOnMissingBean(name = "imageValidateCOdeGenerator")
+  public ValidateCodeGenerator imageValidateCodeGenerator() {
     return new ImageCodeGenerator(securityProperties);
   }
 
-  @Bean
-  @ConditionalOnMissingBean(name = "smsCodeGenerator")
-  public ValidateCodeGenerator smsCodeGenerator() {
-    return new SmsCodeGenerator(securityProperties);
-  }
 
   @Bean
   @ConditionalOnMissingBean(SmsCodeSender.class)

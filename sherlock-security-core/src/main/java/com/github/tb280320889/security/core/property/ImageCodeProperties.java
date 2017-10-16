@@ -1,6 +1,7 @@
 package com.github.tb280320889.security.core.property;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 import org.springframework.stereotype.Component;
 
@@ -9,14 +10,16 @@ import org.springframework.stereotype.Component;
  */
 
 
+@EqualsAndHashCode(callSuper = true)
 @Data
 @Component
-public class ImageCodeProperties {
+public class ImageCodeProperties extends SmsCodeProperties {
 
   private int width = 67;
   private int height = 23;
-  private int length = 4;
-  private int expireIn = 60;
-  private String url;
+
+  public ImageCodeProperties() {
+    setLength(4);
+  }
 
 }
