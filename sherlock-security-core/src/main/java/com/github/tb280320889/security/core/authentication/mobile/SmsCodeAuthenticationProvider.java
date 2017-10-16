@@ -18,12 +18,6 @@ public class SmsCodeAuthenticationProvider implements AuthenticationProvider {
 
   private UserDetailsService userDetailsService;
 
-  /*
-   * (non-Javadoc)
-   *
-   * @see org.springframework.security.authentication.AuthenticationProvider#
-   * authenticate(org.springframework.security.core.Authentication)
-   */
   @Override
   public Authentication authenticate(Authentication authentication) throws AuthenticationException {
 

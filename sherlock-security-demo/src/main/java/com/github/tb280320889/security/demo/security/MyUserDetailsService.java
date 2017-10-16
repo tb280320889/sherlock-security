@@ -1,14 +1,16 @@
-package com.github.tb280320889.security.browser.service;
+package com.github.tb280320889.security.demo.security;
 
 import lombok.extern.slf4j.Slf4j;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.authority.AuthorityUtils;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.social.security.SocialUser;
+import org.springframework.social.security.SocialUserDetails;
+import org.springframework.social.security.SocialUserDetailsService;
 import org.springframework.stereotype.Component;
 
 /**
@@ -17,7 +19,7 @@ import org.springframework.stereotype.Component;
 
 @Slf4j
 @Component
-public class MyUserDetailsService implements UserDetailsService {
+public class MyUserDetailsService implements UserDetailsService, SocialUserDetailsService {
 
   private final PasswordEncoder passwordEncoder;
 
@@ -26,17 +28,28 @@ public class MyUserDetailsService implements UserDetailsService {
     this.passwordEncoder = passwordEncoder;
   }
 
-
   @Override
   public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+    log.info("form login username : {} ", username);
+    return buildUser(username);
+  }
 
+  private SocialUserDetails buildUser(String userId) {
     final boolean enabled = true;
     final boolean accountNonExpired = true;
     final boolean credentialsNonExpired = true;
     final boolean accountNonLocked = true;
-    final User user = new User("sherlock", passwordEncoder.encode("123456"), enabled, accountNonExpired, credentialsNonExpired, accountNonLocked, AuthorityUtils.commaSeparatedStringToAuthorityList("admin"));
+    final String password = passwordEncoder.encode("123456");
 
-    return user;
+    log.info("password : {} ", password);
+
+    return new SocialUser(userId, password, enabled, accountNonExpired, credentialsNonExpired, accountNonLocked, AuthorityUtils.commaSeparatedStringToAuthorityList("admin"));
   }
 
+  @Override
+  public SocialUserDetails loadUserByUserId(String userId) throws UsernameNotFoundException {
+
+    log.info("social login userId : {} ", userId);
+    return buildUser(userId);
+  }
 }

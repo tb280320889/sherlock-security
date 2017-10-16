@@ -28,7 +28,7 @@ spring:
       max-wait: -1
 
 server:
-  port: 8060
+  port: 80
 
 sherlock:
   security:
@@ -39,6 +39,13 @@ sherlock:
             length: 6
             width: 100
             url: /user,/user/*
+    social-properties:
+        filterProcessUrl: /qqLogin
+        qq-properties:
+            app-id: wxd99431bbff8305a0
+            app-secret: 60f78681d063590a469f1b297feff3c4
+            providerId: callback.do
 #security:
 #  basic:
 #    enabled: false
+

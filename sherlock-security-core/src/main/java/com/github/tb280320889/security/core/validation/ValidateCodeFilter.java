@@ -1,6 +1,7 @@
 package com.github.tb280320889.security.core.validation;
 
 import com.github.tb280320889.security.core.exception.ValidateCodeException;
+import com.github.tb280320889.security.core.property.ImageCodeProperties;
 import com.github.tb280320889.security.core.property.SecurityConstants;
 import com.github.tb280320889.security.core.property.SecurityProperties;
 
@@ -14,8 +15,6 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import lombok.Getter;
-import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 
 import org.apache.commons.lang.StringUtils;
@@ -31,8 +30,6 @@ import org.springframework.web.filter.OncePerRequestFilter;
  * Created by TangBin on 2017/10/13.
  */
 
-@Getter
-@Setter
 @Slf4j
 @Component
 public class ValidateCodeFilter extends OncePerRequestFilter implements InitializingBean {
@@ -69,10 +66,12 @@ public class ValidateCodeFilter extends OncePerRequestFilter implements Initiali
     super.afterPropertiesSet();
 
     urlMap.put(SecurityConstants.DEFAULT_LOGIN_PROCESSING_URL_FORM, ValidateCodeType.IMAGE);
-    addUrlToMap(securityProperties.getValidateCodeProperties().getImageCodeProperties().getUrl(), ValidateCodeType.IMAGE);
+    final ImageCodeProperties imageCodeProperties = securityProperties.getValidateCodeProperties().getImageCodeProperties();
+
+    addUrlToMap(imageCodeProperties.getUrl(), ValidateCodeType.IMAGE);
 
     urlMap.put(SecurityConstants.DEFAULT_LOGIN_PROCESSING_URL_MOBILE, ValidateCodeType.SMS);
-    addUrlToMap(securityProperties.getValidateCodeProperties().getImageCodeProperties().getUrl(), ValidateCodeType.SMS);
+    addUrlToMap(imageCodeProperties.getUrl(), ValidateCodeType.SMS);
   }
 
   /**

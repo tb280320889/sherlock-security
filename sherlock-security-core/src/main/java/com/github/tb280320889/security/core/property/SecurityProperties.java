@@ -21,4 +21,6 @@ public class SecurityProperties {
 
   private ValidateCodeProperties validateCodeProperties = new ValidateCodeProperties();
 
+  private SocialProperties socialProperties = new SocialProperties();
+
 }

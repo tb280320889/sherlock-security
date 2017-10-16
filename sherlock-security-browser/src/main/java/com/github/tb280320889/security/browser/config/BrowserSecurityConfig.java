@@ -9,7 +9,6 @@ import com.github.tb280320889.security.core.validation.ValidateCodeSecurityConfi
 import javax.sql.DataSource;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -18,6 +17,7 @@ import org.springframework.security.web.authentication.AuthenticationFailureHand
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.rememberme.JdbcTokenRepositoryImpl;
 import org.springframework.security.web.authentication.rememberme.PersistentTokenRepository;
+import org.springframework.social.security.SpringSocialConfigurer;
 
 /**
  * Created by TangBin on 2017/10/12.
@@ -33,6 +33,7 @@ public class BrowserSecurityConfig extends AbstractChannelSecurityConfig {
   private final ValidateCodeSecurityConfig validateCodeSecurityConfig;
   private final AuthenticationSuccessHandler sherlockAuthenticationSuccessHandler;
   private final AuthenticationFailureHandler sherlockAuthenticationFailureHandler;
+  private final SpringSocialConfigurer sherlockSocialSecurityConfig;
 
 
   /**
@@ -43,7 +44,7 @@ public class BrowserSecurityConfig extends AbstractChannelSecurityConfig {
    * @param validateCodeSecurityConfig
    */
   @Autowired
-  public BrowserSecurityConfig(SecurityProperties securityProperties, @Qualifier("dataSource") DataSource dataSource, UserDetailsService userDetailsService, SmsCodeAuthenticationSecurityConfig smsCodeAuthenticationSecurityConfig, ValidateCodeSecurityConfig validateCodeSecurityConfig, AuthenticationSuccessHandler sherlockAuthenticationSuccessHandler, AuthenticationFailureHandler sherlockAuthenticationFailureHandler) {
+  public BrowserSecurityConfig(SecurityProperties securityProperties, DataSource dataSource, UserDetailsService userDetailsService, SmsCodeAuthenticationSecurityConfig smsCodeAuthenticationSecurityConfig, ValidateCodeSecurityConfig validateCodeSecurityConfig, AuthenticationSuccessHandler sherlockAuthenticationSuccessHandler, AuthenticationFailureHandler sherlockAuthenticationFailureHandler, SpringSocialConfigurer sherlockSocialSecurityConfig) {
     super(sherlockAuthenticationSuccessHandler, sherlockAuthenticationFailureHandler);
     this.securityProperties = securityProperties;
     this.dataSource = dataSource;
@@ -52,6 +53,7 @@ public class BrowserSecurityConfig extends AbstractChannelSecurityConfig {
     this.validateCodeSecurityConfig = validateCodeSecurityConfig;
     this.sherlockAuthenticationSuccessHandler = sherlockAuthenticationSuccessHandler;
     this.sherlockAuthenticationFailureHandler = sherlockAuthenticationFailureHandler;
+    this.sherlockSocialSecurityConfig = sherlockSocialSecurityConfig;
   }
 
   /**
@@ -73,6 +75,8 @@ public class BrowserSecurityConfig extends AbstractChannelSecurityConfig {
     http.apply(validateCodeSecurityConfig)
         .and()
         .apply(smsCodeAuthenticationSecurityConfig)
+        .and()
+        .apply(sherlockSocialSecurityConfig)
         .and()
         .rememberMe()
         .tokenRepository(persistentTokenRepository())
